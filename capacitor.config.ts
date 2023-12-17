@@ -6,6 +6,8 @@ const config: CapacitorConfig = {
   webDir: 'www',
   server: {
     androidScheme: 'https'
+  },plugins: {
+    "@capacitor/storage": {}
   }
 };
 

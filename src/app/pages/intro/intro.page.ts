@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { INTRO_KEY } from 'src/app/guards/intro.guard';
+import { Router } from '@angular/router';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-intro',
@@ -7,9 +10,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IntroPage implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
+  next() {
+    
+  }
+ 
+
+  async start() {
+    await Preferences.set({ key: INTRO_KEY, value: 'true' });
+    this.router.navigateByUrl('/login', { replaceUrl: true });
+  }
 
 }
+
+
+
