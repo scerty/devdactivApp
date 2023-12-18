@@ -1,4 +1,4 @@
-import { AuthenticationService } from './../services/authentication.service';
+import { AuthService } from '../services/auth.service';
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, CanLoad, CanLoadFn, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -8,7 +8,7 @@ import { filter, map, take } from 'rxjs/operators';
 	providedIn: 'root'
 })
 class AutoGuard  {
-	constructor(private authService: AuthenticationService, private route: Router ) {}
+	constructor(private authService: AuthService, private route: Router ) {}
 
 	canActivate(
     route: ActivatedRouteSnapshot,
@@ -21,7 +21,7 @@ class AutoGuard  {
         console.log('Found previous token, automatic login');
         if (isAuthenticated) {
           // Directly open inside area
-          this.route.navigateByUrl('/tabs/tab1lo', { replaceUrl: true });
+          this.route.navigateByUrl('/tabs/tab1', { replaceUrl: true });
           return false; // Return false instead of void
         } else {
           // Simply allow access to the login

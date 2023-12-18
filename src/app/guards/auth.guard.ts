@@ -1,40 +1,29 @@
-import { AuthenticationService } from './../services/authentication.service';
-import { Injectable, inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, CanLoad, CanLoadFn, Router, RouterStateSnapshot } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { CanLoad, Router } from '@angular/router';
+
 import { Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map, take } from 'rxjs/operators'
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root'
 })
-class AuthGuard  {
-	constructor(private authService: AuthenticationService, private route: Router ) {}
+export class AuthGuard implements CanLoad {
 
-	canActivate(
-    route: ActivatedRouteSnapshot,
-    state:RouterStateSnapshot
-  ):Observable<boolean> {
-		return this.authService.isAuthenticated.pipe(
-			filter((val) => val !== null), 
-			take(1), 
-			map((isAuthenticated) => {
-				if (isAuthenticated) {
-					return true;
-          //console.log('true')
+  constructor(private apiService: AuthService, private router: Router) { }
 
-				} else {
-					this.route.navigateByUrl('/login');
-					return false;
-          //console.log('false')
-				}
-			})
-		);
-	}
-}
-
-export const isAuthenticatedGuard:CanActivateFn=(route:ActivatedRouteSnapshot,state:RouterStateSnapshot):Observable<boolean> =>{
-  return inject(AuthGuard).canActivate(route,state)
-
-
-  
+  canLoad(): Observable<boolean> {
+    return this.apiService.isAuthenticated.pipe(
+      filter(val => val !== null), // Filter out initial Behaviour subject value
+      take(1), // Otherwise the Observable doesn't complete!
+      map(isAuthenticated => {
+        if (isAuthenticated) {
+          return true;
+        } else {
+          this.router.navigateByUrl('/')
+          return false;
+        }
+      })
+    );
+  }
 }
