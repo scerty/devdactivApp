@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { IntroGuard } from './guards/intro.guard';
-import { isAutoGuard } from './guards/auto-login.guard';
+import { AutoLoginGuard } from './guards/auto-login.guard';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
 {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule),
-    canLoad:[IntroGuard,],
-    //canActivate:[isAutoGuard]
+    canLoad:[IntroGuard,AutoLoginGuard],
+    //canActivate:[isAutoGuard] //refirecting the use if he alredy loged ing 
 
 
   }
@@ -17,7 +17,8 @@ const routes: Routes = [
   ,{
     path: 'tabs',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
-   // canActivate:[isAuthenticatedGuard]
+    //canActivate:[isAuthenticatedGuard],
+    canLoad:[AuthGuard]
   },
   {
     path: 'intro',
